@@ -291,21 +291,19 @@ export function createApp() {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  app.use(
-    cors({
-      origin: (origin, cb) => {
-        // Allow same-origin / server-to-server / curl (no Origin header)
-        if (!origin) return cb(null, true);
-        // Wildcard if not configured (also handles Vercel preview URLs)
-        if (allowedOrigins.length === 0) return cb(null, true);
-        if (allowedOrigins.includes(origin)) return cb(null, true);
-        // Allow any *.vercel.app preview
-        if (/\.vercel\.app$/.test(new URL(origin).hostname)) return cb(null, true);
-        return cb(new Error('CORS not allowed'));
-      },
-      credentials: true,
-    })
-  );
+app.use(cors({
+  origin: [
+    "https://www.yousufconsultancy.com",
+    "https://yousufconsultancy.com"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+app.options("*", cors());
+
+
   app.use(express.json({ limit: '20mb' }));
   app.use(express.urlencoded({ limit: '20mb', extended: true }));
 
